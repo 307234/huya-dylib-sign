@@ -1,0 +1,19 @@
+name: Sign dylib
+on:
+  workflow_dispatch:  # 手动触发
+  push:
+    paths: ["HUYA_1.9_patched.dylib"]
+jobs:
+  sign:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ad-hoc sign
+        run: codesign --force --deep --sign - HUYA_1.9_patched.dylib
+      - name: Verify
+        run: codesign -vvv HUYA_1.9_patched.dylib
+      - name: Upload signed dylib
+        uses: actions/upload-artifact@v4
+        with:
+          name: HUYA_1.9_signed
+          path: HUYA_1.9_patched.dylib
