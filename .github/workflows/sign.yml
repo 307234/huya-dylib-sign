@@ -5,7 +5,7 @@ on:
     paths: ["HUYA_1.9_patched.dylib"]
 jobs:
   sign:
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v4
       - name: Ad-hoc sign
