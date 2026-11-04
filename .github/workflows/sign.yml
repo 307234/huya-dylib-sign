@@ -8,14 +8,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install ldid
+      - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ldid
+          sudo apt-get install -y build-essential git libplist-dev libssl-dev
+      - name: Build ldid
+        run: |
+          git clone https://github.com/xerub/ldid.git
+          cd ldid
+          make
       - name: Ad-hoc sign
-        run: ldid -S HUYA_1.9_patched.dylib
+        run: ./ldid/ldid -S HUYA_1.9_patched.dylib
       - name: Verify
-        run: ldid -e HUYA_1.9_patched.dylib
+        run: ./ldid/ldid -e HUYA_1.9_patched.dylib
       - name: Upload signed dylib
         uses: actions/upload-artifact@v4
         with:
