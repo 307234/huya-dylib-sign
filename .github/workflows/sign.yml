@@ -5,13 +5,17 @@ on:
     paths: ["HUYA_1.9_patched.dylib"]
 jobs:
   sign:
-    runs-on: macos-13
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install ldid
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ldid
       - name: Ad-hoc sign
-        run: codesign --force --deep --sign - HUYA_1.9_patched.dylib
+        run: ldid -S HUYA_1.9_patched.dylib
       - name: Verify
-        run: codesign -vvv HUYA_1.9_patched.dylib
+        run: ldid -e HUYA_1.9_patched.dylib
       - name: Upload signed dylib
         uses: actions/upload-artifact@v4
         with:
